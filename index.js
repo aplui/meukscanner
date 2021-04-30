@@ -5,24 +5,26 @@ const TOKEN = process.env.TOKEN;
 const puppeteer = require('puppeteer');
 
 (async () => {
+    const browser = await puppeteer.launch({headless: false});
+    const page = await browser.newPage();
+    const url = 'https://tweakers.net/toetsenborden/aanbod/'
+    const accept = 'button[class="ctaButton"]'
 
-let meukUrl = 'https://tweakers.net/toetsenborden/aanbod/';
+        await page.goto(url, { waitUntil: 'networkidle0'  });
+        await page.waitForSelector(accept);
+        await page.click(accept);
+        await page.waitForNavigation({waitUntil: 'networkidle0'});
 
-let browser = await puppeteer.launch();
-let page = await browser.newPage()
+            let data = await page.evaluate(() => {
+            let ad = document.querySelector('#listing > table > tbody > tr:nth-child(1) > td:nth-child(2)').innerText;
+        
+        return ad
+   
+    });
 
-await page.goto(meukUrl, { waitUntil: 'domcontentloaded' })
-
-    let data = await page.evaluate(() => {
-    let list =  document.querySelector('tr').innerText
-    return list
-
-})
-
-console.log(data);
-await browser.close();
-
-})()
+    console.log(data);
+    await browser.close();
+  })();
 
 client.on('ready', () => {
 
