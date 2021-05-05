@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const puppeteer = require('puppeteer');
 
-(async () => {
+var ad = (async () => {
     const browser = await puppeteer.launch({headless: true});
     const page = await browser.newPage();
     const tweakersUrl = 'https://tweakers.net/toetsenborden/aanbod/'
@@ -35,8 +35,8 @@ const puppeteer = require('puppeteer');
     });
 
     console.log(data);
-    const ad = {}
     await browser.close();
+    return data
   })();
 
 
@@ -45,10 +45,11 @@ const puppeteer = require('puppeteer');
     if (msg.content === '!meuk') {
 
         const embed = new Discord.MessageEmbed()
-        .setTitle(data.title)
-        .setImage(data.img)
-        .setDescription(data.text)
-        .setUrl(data.adurl)
+        console.log(ad.title)
+        .setTitle(ad.title)
+        // .setImage(data.img)
+        // .setDescription(data.text)
+        // .setUrl(data.adurl)
 
     msg.reply(embed)
 }
