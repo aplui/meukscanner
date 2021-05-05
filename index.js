@@ -11,13 +11,14 @@ async function ad() {
     const accept = 'button[class="ctaButton"]'
 
         await page.goto(tweakersUrl, { waitUntil: 'networkidle0'  });
+        await page.setDefaultNavigationTimeout(0);
         await page.waitForSelector(accept);
         await page.click(accept);
         await page.waitForNavigation({waitUntil: 'networkidle0'});
 
             let data = await page.evaluate(() => {
 
-                let title = document.querySelector('#listing > table > tbody > tr:nth-child(1) > td:nth-child(2)').innerText;
+                let title = document.querySelector('#listing > table > tbody > tr:nth-child(1) > td:nth-child(2) > p.title.ellipsis > a').innerText;
                 let img = document.querySelector('#listing > table > tbody > tr:nth-child(1) td > a > img').src;
                 let text = document.querySelector('p[class="lead"]').innerText
                 let price = document.querySelector('#listing > table > tbody > tr:nth-child(1) > td.vaprice > p > a').innerText;
@@ -43,16 +44,15 @@ async function ad() {
   client.on('message', async msg => {
 
     if (msg.content === '!meuk') {
+        
+        let a = (await ad())
+        const embed = new Discord.MessageEmbed()
 
-       
-        console.log(await ad())
-        // const embed = new Discord.MessageEmbed()
-        // .setTitle(ad.title)
-        // .setImage(data.img)
-        // .setDescription(data.text)
-        // .setUrl(data.adurl)
-
-    //msg.reply(embed)
+            .setTitle(a.title)
+            .setDescription(a.text)
+            .setURL(a.url)
+            
+        msg.reply(embed)
 }
 
 })
