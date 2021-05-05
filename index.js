@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const puppeteer = require('puppeteer');
 
-var ad = (async () => {
+async function ad() {
     const browser = await puppeteer.launch({headless: true});
     const page = await browser.newPage();
     const tweakersUrl = 'https://tweakers.net/toetsenborden/aanbod/'
@@ -34,24 +34,25 @@ var ad = (async () => {
    
     });
 
-    console.log(data);
+    //console.log(data);
     await browser.close();
     return data
-  })();
+  };
 
 
-  client.on('message', msg => {
+  client.on('message', async msg => {
 
     if (msg.content === '!meuk') {
 
-        const embed = new Discord.MessageEmbed()
-        console.log(ad.title)
-        .setTitle(ad.title)
+       
+        console.log(await ad())
+        // const embed = new Discord.MessageEmbed()
+        // .setTitle(ad.title)
         // .setImage(data.img)
         // .setDescription(data.text)
         // .setUrl(data.adurl)
 
-    msg.reply(embed)
+    //msg.reply(embed)
 }
 
 })
@@ -67,3 +68,4 @@ client.on('ready', () => {
 
 //timer die om de paar minuten checkt of er wat nieuws is
 // als er iets is gewijzigd tov voorgaande situatie (if else) update doen in discord
+//toevoegen pending scan
